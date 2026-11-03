@@ -350,15 +350,24 @@ def _run(
 
 
 def render_settings(dest: Path, port: int) -> None:
-    """Создаёт settings.yml из шаблона пакета со случайным secret_key."""
+    """Создаёт settings.yml из шаблона пакета со случайным secret_key.
+
+    Если задан env ``PROXY_SERVER``, исходящие запросы движков направляются
+    через этот прокси (SearXNG на curl_cffi сам env-переменные не читает).
+    """
     template = _TEMPLATE_PATH.read_text(encoding="utf-8")
-    dest.write_text(
-        template.replace("{{PORT}}", str(int(port))).replace(
-            "{{SECRET_KEY}}", secrets.token_urlsafe(48)
-        ),
-        encoding="utf-8",
-        newline="\n",
+    template = template.replace("{{PORT}}", str(int(port))).replace(
+        "{{SECRET_KEY}}", secrets.token_urlsafe(48)
     )
+    proxy = os.getenv("PROXY_SERVER", "").strip()
+    if proxy:
+        template += (
+            "\n# Исходящие запросы движков через корпоративный прокси (env PROXY_SERVER)\n"
+            "outgoing:\n"
+            "  proxies:\n"
+            f"    all://: {proxy}\n"
+        )
+    dest.write_text(template, encoding="utf-8", newline="\n")
 
 
 # ---------------------------------------------------------------------------
