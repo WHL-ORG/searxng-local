@@ -12,15 +12,12 @@ from __future__ import annotations
 
 import asyncio
 
-from searxng_local import SearXNG
+from searxng import SearXNG
 
 
 async def run(instance: SearXNG) -> None:
     data = await instance.search(
         "python 3.11 what's new",
-        categories="it",
-        language="en",
-        safesearch=1,
     )
     results = data.get("results", [])
     print(f"Найдено результатов: {len(results)}")
