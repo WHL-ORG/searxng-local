@@ -336,13 +336,8 @@ def render_settings(dest: Path, port: int) -> None:
         "{{SECRET_KEY}}", secrets.token_urlsafe(48)
     )
     proxy = os.getenv("PROXY_SERVER", "").strip()
-    if proxy:
-        template += (
-            "\n# Исходящие запросы движков через корпоративный прокси (env PROXY_SERVER)\n"
-            "outgoing:\n"
-            "  proxies:\n"
-            f"    all://: {proxy}\n"
-        )
+    proxy_block = f"  proxies:\n    all://: {proxy}\n" if proxy else ""
+    template = template.replace("{{PROXY}}", proxy_block)
     dest.write_text(template, encoding="utf-8", newline="\n")
 
 

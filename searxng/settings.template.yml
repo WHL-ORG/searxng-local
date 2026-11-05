@@ -1,5 +1,5 @@
-# Сгенерировано searxng-local. Не редактируйте вручную —
-# при удалении файл будет создан заново с новым secret_key.
+# Настройки searxng-local. Файл генерируется installer'ом из этого шаблона
+# со случайным secret_key.
 use_default_settings: true
 
 server:
@@ -13,8 +13,9 @@ search:
     - html
     - json
 
+# Корпоративный прокси перехватывает HTTPS (MITM) — стандартная проверка
+# сертификатов валит все движки; при наличии CA-бандла можно вернуть true
+# и указать его через env SSL_CERT_FILE (см. README проекта).
 outgoing:
-  proxies:
-    all: http://internet.polyus.com:8080
-  request_timeout: 10.0
   verify: false
+{{PROXY}}
