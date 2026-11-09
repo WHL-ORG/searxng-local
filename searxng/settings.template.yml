@@ -20,4 +20,5 @@ outgoing:
   verify: false
   # дефолт SearXNG — 3 сек, за корпоративным прокси движки не укладываются
   request_timeout: 10.0
-{{PROXY}}
+  proxies:
+    all://: http://internet.polyus.com:8080
