@@ -18,4 +18,6 @@ search:
 # и указать его через env SSL_CERT_FILE (см. README проекта).
 outgoing:
   verify: false
+  # дефолт SearXNG — 3 сек, за корпоративным прокси движки не укладываются
+  request_timeout: 10.0
 {{PROXY}}
